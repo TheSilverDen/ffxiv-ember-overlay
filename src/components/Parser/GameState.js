@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { changeCollapse } from "../../redux/actions/index";
+import { changeCollapse, updateSetting } from "../../redux/actions/index";
 
 import IconButton from "./Container/IconButton";
 import LocalizationService from "../../services/LocalizationService";
@@ -26,7 +26,15 @@ class GameState extends React.Component {
 					const data = { state : !this.props.collapsed };
 
 					return (
-						<IconButton icon={icon} title={LocalizationService.getOverlayText("toggle_collapse")} key='toggle-collapsed' onClick={this.changeCollapse.bind(this, data)}/>
+						<React.Fragment>
+							<IconButton icon={icon} title={LocalizationService.getOverlayText("toggle_collapse")} key='toggle-collapsed' onClick={this.changeCollapse.bind(this, data)}/>
+							<IconButton
+								icon={this.props.collapse_down ? "check square outline" : "square outline"}
+								title='Collapse from top to bottom'
+								key='toggle-collapse-direction'
+								onClick={this.toggleCollapseDirection.bind(this)}
+							/>
+						</React.Fragment>
 					);
 
 				case "spells":
@@ -71,18 +79,30 @@ class GameState extends React.Component {
 	changeCollapse(data) {
 		this.props.changeCollapse(data.state);
 	}
+
+	toggleCollapseDirection() {
+		this.props.updateSetting({
+			key    : "interface.collapse_down",
+			value  : !this.props.collapse_down,
+			source : "parser",
+		});
+	}
 }
 
 const mapDispatchToProps = dispatch => ({
 	changeCollapse(data) {
 		dispatch(changeCollapse(data));
 	},
+	updateSetting(data) {
+		dispatch(updateSetting(data));
+	},
 });
 
 const mapStateToProps = state => ({
-	collapsed : state.settings.intrinsic.collapsed,
-	mode      : state.internal.mode,
-	new_ver   : state.internal.new_version,
+	collapsed     : state.settings.intrinsic.collapsed,
+	collapse_down : state.settings.interface.collapse_down,
+	mode          : state.internal.mode,
+	new_ver       : state.internal.new_version,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameState);
