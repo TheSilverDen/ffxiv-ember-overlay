@@ -135,8 +135,8 @@ class PlayerTable extends React.Component {
 			} else if (player._is_current) {
 				// The current player may not be present in party[].
 				// Put them into the first available slot.
-				player._party_slot = 1;
-			} else {
+				player._party_slot = player._party_slot || 1;
+			} else if (!player._party_slot) {
 				player._party_slot = 0;
 			}
 		}

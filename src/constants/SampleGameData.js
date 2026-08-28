@@ -81,6 +81,7 @@ const SampleGameData = {
 	},
 	Combatant : {
 		"Hattori Hanzo" : {
+			_party_slot        : 1,
 			n                  : "\n",
 			t                  : "\t",
 			name               : "Hattori Hanzo",
@@ -171,6 +172,7 @@ const SampleGameData = {
 			enmity_percent     : "13.00",
 		},
 		YOU : {
+			_party_slot        : 2,
 			n                  : "\n",
 			t                  : "\t",
 			name               : "YOU",
@@ -261,6 +263,7 @@ const SampleGameData = {
 			enmity_percent     : "12.00",
 		},
 		"Lindsey Stirling" : {
+			_party_slot        : 3,
 			n                  : "\n",
 			t                  : "\t",
 			name               : "Lindsey Stirling",
@@ -351,6 +354,7 @@ const SampleGameData = {
 			enmity_percent     : "9.00",
 		},
 		Beedle : {
+			_party_slot        : 4,
 			n                  : "\n",
 			t                  : "\t",
 			name               : "Beedle",
@@ -441,6 +445,7 @@ const SampleGameData = {
 			enmity_percent     : "9.00",
 		},
 		Uther : {
+			_party_slot        : 5,
 			n                  : "\n",
 			t                  : "\t",
 			name               : "Uther",
@@ -531,6 +536,7 @@ const SampleGameData = {
 			enmity_percent     : "100.00",
 		},
 		Ashor : {
+			_party_slot        : 6,
 			n                  : "\n",
 			t                  : "\t",
 			name               : "Ashor",
@@ -621,6 +627,7 @@ const SampleGameData = {
 			enmity_percent     : "20.00",
 		},
 		"Sigmund Freud" : {
+			_party_slot        : 7,
 			n                  : "\n",
 			t                  : "\t",
 			name               : "Sigmund Freud",
@@ -711,6 +718,7 @@ const SampleGameData = {
 			enmity_percent     : "9.00",
 		},
 		"Nicolaus Copernicus" : {
+			_party_slot        : 8,
 			n                  : "\n",
 			t                  : "\t",
 			name               : "Nicolaus Copernicus",

@@ -561,6 +561,46 @@ body.mode-spells {
 	);
 }
 
+#container #inner #content #player-table .row.player[data-party-slot="1"] > .percent-bar {
+	background: rgba(70, 125, 185, 0.22);
+	background-image: none;
+}
+
+#container #inner #content #player-table .row.player[data-party-slot="2"] > .percent-bar {
+	background: rgba(190, 100, 135, 0.22);
+	background-image: none;
+}
+
+#container #inner #content #player-table .row.player[data-party-slot="3"] > .percent-bar {
+	background: rgba(75, 155, 95, 0.22);
+	background-image: none;
+}
+
+#container #inner #content #player-table .row.player[data-party-slot="4"] > .percent-bar {
+	background: rgba(135, 85, 180, 0.22);
+	background-image: none;
+}
+
+#container #inner #content #player-table .row.player[data-party-slot="5"] > .percent-bar {
+	background: rgba(190, 155, 55, 0.22);
+	background-image: none;
+}
+
+#container #inner #content #player-table .row.player[data-party-slot="6"] > .percent-bar {
+	background: rgba(45, 160, 170, 0.22);
+	background-image: none;
+}
+
+#container #inner #content #player-table .row.player[data-party-slot="7"] > .percent-bar {
+	background: rgba(195, 105, 50, 0.22);
+	background-image: none;
+}
+
+#container #inner #content #player-table .row.player[data-party-slot="8"] > .percent-bar {
+	background: rgba(175, 80, 155, 0.22);
+	background-image: none;
+}
+
 #container #inner #content #player-table .row.player[data-party-slot]:not([data-party-slot="0"]):hover > .percent-bar::after {
 	content: '';
 	position: absolute;
@@ -713,46 +753,12 @@ body.mode-spells {
 	);
 }
 
-#container #inner #content #player-table .row.active:not(.active-with-bar) {
-	.setThemeStyle(
-		{
-			background: @dark_playerTableActiveRowBackground;
-		},
-		{
-			background: @light_playerTableActiveRowBackground;
-		},
-		@classicTheme: {
-			background: @classic_playerTableActiveRowBackground;
-		},
-		@clearBlueTheme: {
-			background: @clearBlue_playerTableActiveRowBackground;
-		}
-	);
-}
-
-#container #inner #content #player-table .row.active.active-with-bar .percent-bar {
-	.setThemeStyle(
-		{
-			background-image: linear-gradient(@dark_playerTableActiveRowBackground, @dark_playerTableActiveRowBackground);
-		},
-		{
-			background-image: linear-gradient(@light_playerTableActiveRowBarBackground, @light_playerTableActiveRowBarBackground);
-		},
-		@classicTheme: {
-			background-image: linear-gradient(@classic_playerTableActiveRowBackground, @classic_playerTableActiveRowBackground);
-		},
-		@clearBlueTheme: {
-			background-image: linear-gradient(@clearBlue_playerTableActiveRowBackground, @clearBlue_playerTableActiveRowBackground);
-		}
-	);
-}
-
 #container #inner #content #player-table:not(.monster-table) .row.player,
 #container #inner #content #player-table:not(.monster-table) .row.player * {
 	cursor : pointer;
 }
 
-#container #inner #content #player-table .row.player:not(.active):hover {
+#container #inner #content #player-table .row.player:hover {
 	.setThemeStyle(
 		{
 			background: @dark_rowAndLinkHoverBackground;
@@ -765,6 +771,24 @@ body.mode-spells {
 		},
 		@clearBlueTheme: {
 			background: @clearBlue_rowAndLinkHoverBackground;
+		}
+	);
+}
+
+#container #inner #content #player-table .row.active > .column:first-child,
+#container #inner #content #player-table .row.active .player-data > .column:first-child {
+	.setThemeStyle(
+		{
+			box-shadow: inset 2px 0 0 @dark_borderOuter;
+		},
+		{
+			box-shadow: inset 2px 0 0 @light_borderOuter;
+		},
+		@classicTheme: {
+			box-shadow: inset 2px 0 0 @classic_borderOuter;
+		},
+		@clearBlueTheme: {
+			box-shadow: inset 2px 0 0 @clearBlue_borderOuter;
 		}
 	);
 }
