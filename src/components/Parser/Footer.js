@@ -7,10 +7,8 @@ import PlayerProcessor from "../../processors/PlayerProcessor";
 import VersionService from "../../services/VersionService";
 import SettingsService from "../../services/SettingsService";
 import LocalizationService from "../../services/LocalizationService";
-import DiscordService from "../../services/DiscordService";
 import IconButton from "./Container/IconButton";
 import EncounterMenu from "./Container/EncounterMenu";
-import DiscordMenu from "./Container/DiscordMenu";
 
 class Footer extends React.Component {
 	componentDidMount() {
@@ -85,7 +83,6 @@ class Footer extends React.Component {
 
 		const actions = () => {
 			const actions = [
-				this.getDiscordButton(toggleMenu, trigger),
 				<ContextMenuTrigger id='encounter-history-menu' key='encounter-history-trigger' ref={c => trigger = c} attributes={{ className : "icon-container" }} holdToDisplay={-1}>
 					<IconButton icon='history' title={LocalizationService.getOverlayText("encounter_history")} key='encounter-history-button' no_container={true} onClick={toggleMenu}/>
 				</ContextMenuTrigger>,
@@ -109,29 +106,9 @@ class Footer extends React.Component {
 				<div id='footer-actions'>
 					{actions()}
 					<EncounterMenu/>
-					<DiscordMenu webhook={this.props.discord_webhook}/>
 				</div>
 			</div>
 		);
-	}
-
-	getDiscordButton() {
-		let trigger      = null;
-		const toggleMenu = e => {
-			if (trigger) {
-				trigger.handleContextClick(e);
-			}
-		};
-
-		if (this.props.discord_webhook) {
-			return (
-				<ContextMenuTrigger id='discord-menu' key='discord-trigger' ref={c => trigger = c} attributes={{ className : "icon-container" }} holdToDisplay={-1}>
-					<IconButton icon='discord' title={LocalizationService.getOverlayText("discord")} key='discord-button' no_container={true} onClick={toggleMenu}/>
-				</ContextMenuTrigger>
-			);
-		}
-
-		return <IconButton icon='discord' title={LocalizationService.getOverlayText("discord")} key='discord' onClick={DiscordService.openDiscordWindow}/>;
 	}
 
 	changeTableType(type) {
@@ -184,7 +161,6 @@ const mapStateToProps = state => ({
 	overlayplugin_author : state.internal.overlayplugin_author,
 	encounter            : state.internal.game.Encounter,
 	show_dps             : state.settings.interface.footer_dps,
-	discord_webhook      : state.settings.discord.url,
 	new_ver              : state.internal.new_version,
 });
 

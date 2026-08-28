@@ -98,7 +98,7 @@ class Player extends React.Component {
 		}
 
 		return (
-			<div data-tip={tooltip} data-multiline={true} className={"row player " + player_type} data-job={job} data-role={role} data-party={Number(player._party || 0)} key={"player-row-" + player_name} data-uuid={player_name} onClick={this.props.onClick}>
+			<div data-tip={tooltip} data-multiline={true} className={"row player " + player_type} data-job={job} data-role={role} data-party={Number(player._party || 0)} data-party-slot={Number(player._party_slot || 0)} key={"player-row-" + player_name} data-uuid={player_name} onClick={this.props.onClick}>
 				{playerData()}
 				{statData()}
 				{

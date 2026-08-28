@@ -19,9 +19,17 @@ module.exports = {
 			},
 		},
 		{
-			plugin : {
-				overrideWebpackConfig({ context, webpackConfig }) {
-					const { isFound, match: fileLoaderMatch } = getLoader(
+				plugin : {
+					overrideWebpackConfig({ context, webpackConfig }) {
+						// react-draggable now ships an .mjs build. Webpack 4 (used by
+						// react-scripts 3) otherwise treats its React named imports as
+						// unavailable CommonJS exports.
+						webpackConfig.module.rules.push({
+							test : /\.mjs$/,
+							type : "javascript/auto",
+						});
+
+						const { isFound, match: fileLoaderMatch } = getLoader(
 						webpackConfig,
 						loaderByName("file-loader"),
 					);

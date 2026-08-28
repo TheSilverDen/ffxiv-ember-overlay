@@ -125,6 +125,22 @@ class PlayerTable extends React.Component {
 
 		const resorted_players = Array.from(sorted_players);
 
+		// Assign stable party slots for party bar colors.
+		// The slot is based on party order, not DPS ranking.
+		for (const player of resorted_players) {
+			const party_index = this.props.party.indexOf(player._name);
+
+			if (party_index !== -1) {
+				player._party_slot = party_index + 1;
+			} else if (player._is_current) {
+				// The current player may not be present in party[].
+				// Put them into the first available slot.
+				player._party_slot = 1;
+			} else {
+				player._party_slot = 0;
+			}
+		}
+
 		if (prioritize_pt && this.props.party.length > 1) {
 			resorted_players.sort((a, b) => {
 				const party_has_a = (a._is_current || this.props.party.indexOf(a._name) !== -1);
