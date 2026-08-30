@@ -188,7 +188,7 @@ class GameDataProcessor {
 
 		for (const i in data.party) {
 			if (data.party[i].inParty) {
-				party.push(data.party[i].name);
+				party.push({ name : data.party[i].name, slot : Number(i) + 1 });
 			}
 		}
 

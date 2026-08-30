@@ -14,6 +14,9 @@ import { getEncounterTitle } from "../../helpers/GameHelper";
 import ReactTooltip from "react-tooltip";
 
 class PlayerTable extends React.Component {
+	party_slots = {};
+	last_encounter_duration = 0;
+
 	componentDidMount() {
 		this.updateBackgrounds();
 
@@ -27,23 +30,32 @@ class PlayerTable extends React.Component {
 	}
 
 	render() {
-		const header         = [];
-		const footer         = [];
-		const rows           = [];
-		const pet_rows       = [];
-		let count            = 0;
-		let rank             = 0;
-		let found            = false;
-		const table_type     = this.props.type;
-		const is_raid        = (table_type === "raid");
-		const player_blur    = (this.props.player_blur);
-		const collapsed      = this.props.collapsed;
-		const sort_column    = this.props.sort_columns[table_type];
-		const sorted_players = (this.props.players) ? PlayerProcessor.sortPlayers(this.props.players, this.props.encounter, sort_column) : [];
-		const short_names    = (is_raid) ? this.props.table_settings.general.raid.short_names : this.props.table_settings.general.table.short_names;
-		const footer_at_top  = this.props.table_settings.general.table.footer_at_top;
-		const percent_bars   = (is_raid) ? this.props.table_settings.general.raid.percent_bars : this.props.table_settings.general.table.percent_bars;
-		const prioritize_pt  = (is_raid) ? this.props.table_settings.general.raid.prioritize_party : this.props.table_settings.general.table.prioritize_party;
+		const header             = [];
+		const footer             = [];
+		const rows               = [];
+		const pet_rows           = [];
+		let count                = 0;
+		let rank                 = 0;
+		let found                = false;
+		const table_type         = this.props.type;
+		const is_raid            = (table_type === "raid");
+		const player_blur        = (this.props.player_blur);
+		const collapsed          = this.props.collapsed;
+		const sort_column        = this.props.sort_columns[table_type];
+		const sorted_players     = (this.props.players) ? PlayerProcessor.sortPlayers(this.props.players, this.props.encounter, sort_column) : [];
+		const short_names        = (is_raid) ? this.props.table_settings.general.raid.short_names : this.props.table_settings.general.table.short_names;
+		const footer_at_top      = this.props.table_settings.general.table.footer_at_top;
+		const percent_bars       = (is_raid) ? this.props.table_settings.general.raid.percent_bars : this.props.table_settings.general.table.percent_bars;
+		const prioritize_pt      = (is_raid) ? this.props.table_settings.general.raid.prioritize_party : this.props.table_settings.general.table.prioritize_party;
+		const encounter_duration = Number(this.props.encounter && this.props.encounter.DURATION) || 0;
+		const party_names        = this.props.party.map(member => member.name);
+
+		// Start a fresh color assignment when a new encounter begins.
+		if (encounter_duration === 0 && this.last_encounter_duration > 0) {
+			this.party_slots = {};
+		}
+
+		this.last_encounter_duration = encounter_duration;
 
 		if (!is_raid) {
 			for (const key of this.props.table_columns[table_type]) {
@@ -125,26 +137,47 @@ class PlayerTable extends React.Component {
 
 		const resorted_players = Array.from(sorted_players);
 
-		// Assign stable party slots for party bar colors.
-		// The slot is based on party order, not DPS ranking.
-		for (const player of resorted_players) {
-			const party_index = this.props.party.indexOf(player._name);
-
-			if (party_index !== -1) {
-				player._party_slot = party_index + 1;
-			} else if (player._is_current) {
-				// The current player may not be present in party[].
-				// Put them into the first available slot.
-				player._party_slot = player._party_slot || 1;
-			} else if (!player._party_slot) {
-				player._party_slot = 0;
+		// Assign slots once per encounter. Party changes must not recolor
+		// players that are already present in the current encounter.
+		for (const member of this.props.party) {
+			if (!this.party_slots[member.name]) {
+				const used_slots = Object.values(this.party_slots);
+				if (used_slots.indexOf(member.slot) === -1) {
+					this.party_slots[member.name] = member.slot;
+				} else {
+					for (let slot = 1; slot <= 8; slot++) {
+						if (used_slots.indexOf(slot) === -1) {
+							this.party_slots[member.name] = slot;
+							break;
+						}
+					}
+				}
 			}
 		}
 
-		if (prioritize_pt && this.props.party.length > 1) {
+		for (const player of resorted_players) {
+			// Sample data already contains the original party slot on the player.
+			player._party_slot = this.party_slots[player._name] || player._party_slot || 0;
+			if (player._party_slot && !this.party_slots[player._name]) {
+				this.party_slots[player._name] = player._party_slot;
+			}
+
+			if (player._is_current && !player._party_slot) {
+				const used_slots = Object.values(this.party_slots);
+				for (let slot = 1; slot <= 8; slot++) {
+					if (used_slots.indexOf(slot) === -1) {
+						this.party_slots[player._name] = slot;
+						player._party_slot             = slot;
+						break;
+					}
+				}
+			}
+		}
+
+		if (prioritize_pt && party_names.length > 1) {
 			resorted_players.sort((a, b) => {
-				const party_has_a = (a._is_current || this.props.party.indexOf(a._name) !== -1);
-				const party_has_b = (b._is_current || this.props.party.indexOf(b._name) !== -1);
+				const party_has_a = (a._is_current || party_names.indexOf(a._name) !== -1);
+				const party_has_b = (b._is_current || party_names.indexOf(b._name) !== -1);
 
 				a._party = party_has_a;
 				b._party = party_has_b;

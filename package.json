@@ -58,7 +58,7 @@
 	"build:nonssl": "NODE_OPTIONS=--openssl-legacy-provider env-cmd -e default,production,nonssl craco build",
 		"prebuild": "npm run copy:changelog",
 	"build": "NODE_OPTIONS=--openssl-legacy-provider env-cmd -e default,production craco build",
-		"deploy": "npm run build && rsync -az --delete build/ deniz@192.168.0.168:/mnt/apps/dockge/ember-overlay/build/",
+		"deploy": "env-cmd -f .env.deploy sh -c 'npm run build && rsync -az --delete \"$DEPLOY_SOURCE\" \"$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH\"'",
 		"test": "craco test",
 		"eject": "craco eject",
 		"eslint": "npx eslint src"
